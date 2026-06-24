@@ -126,4 +126,3 @@ configuration and seed alongside every result.
   re-register; clients must retry interrupted streams.
 - This is a local V0.1 serving-control implementation, not a production
   replacement for a model-serving platform.
-# AetherServe
