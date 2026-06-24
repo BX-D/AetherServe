@@ -1,0 +1,24 @@
+services:
+  router:
+    build: .
+    command: ["-config", "/configs/docker-router.yaml"]
+    volumes:
+      - ./configs:/configs:ro
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+  worker-1:
+    build: .
+    entrypoint: ["/usr/local/bin/mock-worker"]
+    command: ["-config", "/configs/docker-mock-worker-1.yaml"]
+    volumes:
+      - ./configs:/configs:ro
+    depends_on: [router]
+  worker-2:
+    build: .
+    entrypoint: ["/usr/local/bin/mock-worker"]
+    command: ["-config", "/configs/docker-mock-worker-2.yaml"]
+    volumes:
+      - ./configs:/configs:ro
+    depends_on: [router]
+

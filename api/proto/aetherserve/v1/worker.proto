@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package aetherserve.v1;
+
+option go_package = "github.com/aetherserve/aetherserve/api/gen/aetherserve/v1;aetherservev1";
+
+import "google/protobuf/timestamp.proto";
+
+service InferenceWorker {
+  rpc Generate(GenerateRequest) returns (stream GenerateChunk);
+  rpc RegisterWorker(RegisterWorkerRequest) returns (RegisterWorkerResponse);
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+}
+
+enum WorkerStatus {
+  WORKER_STATUS_UNSPECIFIED = 0;
+  WORKER_STATUS_HEALTHY = 1;
+  WORKER_STATUS_DRAINING = 2;
+  WORKER_STATUS_UNHEALTHY = 3;
+}
+
+enum FinishReason {
+  FINISH_REASON_UNSPECIFIED = 0;
+  FINISH_REASON_STOP = 1;
+  FINISH_REASON_LENGTH = 2;
+  FINISH_REASON_CANCELLED = 3;
+  FINISH_REASON_ERROR = 4;
+}
+
+message ChatMessage {
+  string role = 1;
+  string content = 2;
+}
+
+message PrefixFingerprint {
+  uint32 token_count = 1;
+  string sha256 = 2;
+}
+
+message KVUsageMetadata {
+  uint64 capacity_tokens = 1;
+  uint64 used_tokens = 2;
+}
+
+message CachedPrefixMetadata {
+  PrefixFingerprint prefix = 1;
+  uint64 last_used_unix_millis = 2;
+}
+
+message WorkerState {
+  uint64 status_version = 1;
+  WorkerStatus status = 2;
+  uint32 waiting_request_count = 3;
+  uint64 waiting_token_count = 4;
+  uint32 running_request_count = 5;
+  uint64 running_work_tokens = 6;
+  KVUsageMetadata kv_usage = 7;
+  double prefill_tokens_per_second = 8;
+  double decode_tokens_per_second = 9;
+  uint32 decode_scheduling_quantum_tokens = 10;
+  repeated CachedPrefixMetadata cached_prefixes = 11;
+  google.protobuf.Timestamp observed_at = 12;
+}
+
+message GenerateRequest {
+  string protocol_version = 1;
+  string request_id = 2;
+  string attempt_id = 3;
+  string worker_id = 4;
+  string tenant_id = 5;
+  string model = 6;
+  repeated ChatMessage messages = 7;
+  uint64 estimated_input_tokens = 8;
+  uint64 expected_output_tokens = 9;
+  uint64 max_output_tokens = 10;
+  google.protobuf.Timestamp deadline = 11;
+  repeated PrefixFingerprint prefix_fingerprints = 12;
+}
+
+message GenerateChunk {
+  string protocol_version = 1;
+  string request_id = 2;
+  string attempt_id = 3;
+  string worker_id = 4;
+  uint32 token_index = 5;
+  string token_text = 6;
+  bool final = 7;
+  FinishReason finish_reason = 8;
+  google.protobuf.Timestamp worker_timestamp = 9;
+}
+
+message RegisterWorkerRequest {
+  string protocol_version = 1;
+  string worker_id = 2;
+  string data_address = 3;
+  string model = 4;
+  google.protobuf.Timestamp registered_at = 5;
+  WorkerState initial_state = 6;
+}
+
+message RegisterWorkerResponse {
+  bool accepted = 1;
+  string message = 2;
+  google.protobuf.Timestamp router_timestamp = 3;
+}
+
+message HeartbeatRequest {
+  string protocol_version = 1;
+  string worker_id = 2;
+  google.protobuf.Timestamp worker_timestamp = 3;
+  WorkerState state = 4;
+}
+
+message HeartbeatResponse {
+  bool accepted = 1;
+  string message = 2;
+  google.protobuf.Timestamp router_timestamp = 3;
+}
+

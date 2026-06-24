@@ -1,0 +1,22 @@
+http_address: "127.0.0.1:8080"
+control_address: "127.0.0.1:9090"
+model: "mock-llm"
+default_max_output_tokens: 32
+max_output_tokens: 128
+max_input_tokens: 2048
+max_context_tokens: 4096
+request_timeout: "30s"
+min_request_timeout: "100ms"
+max_request_timeout: "60s"
+heartbeat_stale_after: "3s"
+sse_buffer_size: 32
+slow_client_timeout: "5s"
+shutdown_timeout: "10s"
+routing:
+  policy: "predicted_ttft"
+  round_robin_seed: 0
+admission:
+  global_inflight_tokens: 16384
+  tenant_rate_per_second: 4096
+  tenant_burst_tokens: 8192
+

@@ -1,0 +1,17 @@
+id: "worker-1"
+data_address: "127.0.0.1:9101"
+router_control_address: "127.0.0.1:9090"
+model: "mock-llm"
+heartbeat_interval: "500ms"
+queue_capacity: 64
+prefill_tokens_per_second: 1000
+decode_tokens_per_second: 100
+decode_scheduling_quantum_tokens: 1
+cache_capacity_tokens: 8192
+cache_prefix_limit: 256
+seed: 1
+failure:
+  fail_before_first_count: 0
+  fail_after_tokens: 0
+  slowdown_multiplier: 1
+

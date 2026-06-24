@@ -1,0 +1,70 @@
+# Go build and test outputs
+/bin/
+/dist/
+/tmp/
+*.test
+*.test.exe
+*.exe
+/router
+/mock-worker
+/loadgen
+
+# Coverage, profiling, and tracing outputs
+/coverage/
+coverage.out
+*.coverprofile
+*.cov
+*.pprof
+*.prof
+cpu.prof
+mem.prof
+trace.out
+
+# Repository-local Go caches
+/.cache/
+/.gocache/
+/.go-build/
+
+# Downloaded local toolchains (keep the pinned manifest)
+/.tools/*
+!/.tools/versions.env
+
+# Generated benchmark outputs
+/benchmark/results/
+/benchmark/results.json
+
+# Logs and temporary runtime files
+*.log
+*.log.*
+*.tmp
+*.temp
+*.swp
+*.swo
+/logs/
+/run/
+/docker-data/
+/docker-volumes/
+/.docker-runtime/
+
+# Local environment and configuration overrides
+.env
+.env.*
+!.env.example
+!.env.sample
+/configs/*.local.yaml
+/configs/*.local.yml
+/configs/*.override.yaml
+/configs/*.override.yml
+
+# IDE and editor metadata
+/.idea/
+/.vscode/
+*.iml
+*.code-workspace
+
+# Operating-system metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db

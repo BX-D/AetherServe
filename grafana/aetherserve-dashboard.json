@@ -1,0 +1,33 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "panels": [
+    {
+      "title": "Request throughput",
+      "type": "timeseries",
+      "targets": [{"expr": "rate(aetherserve_requests_total[1m])", "refId": "A"}]
+    },
+    {
+      "title": "TTFT seconds",
+      "type": "timeseries",
+      "targets": [{"expr": "rate(aetherserve_ttft_seconds_sum[1m]) / rate(aetherserve_ttft_seconds_count[1m])", "refId": "A"}]
+    },
+    {
+      "title": "Routing decision latency",
+      "type": "timeseries",
+      "targets": [{"expr": "rate(aetherserve_routing_decision_seconds_sum[1m]) / rate(aetherserve_routing_decision_seconds_count[1m])", "refId": "A"}]
+    },
+    {
+      "title": "Failures and retries",
+      "type": "timeseries",
+      "targets": [
+        {"expr": "rate(aetherserve_request_retries_total[1m])", "refId": "A"},
+        {"expr": "rate(aetherserve_midstream_failures_total[1m])", "refId": "B"}
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "title": "AetherServe V0.1",
+  "version": 1
+}
+
